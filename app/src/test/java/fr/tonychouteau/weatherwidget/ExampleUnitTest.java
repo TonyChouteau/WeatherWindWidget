@@ -1,4 +1,4 @@
-package com.example.weatherwidget;
+package fr.tonychouteau.weatherwidget;
 
 import org.junit.Test;
 
