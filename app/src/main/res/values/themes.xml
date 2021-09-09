@@ -12,16 +12,18 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:background">@color/black</item>
     </style>
 
     <style name="Theme.WeatherWidget.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
         <item name="appWidgetRadius">10dp</item>
-        <item name="appWidgetPadding">5dp</item>
+        <item name="appWidgetPadding">0dp</item>
         <item name="appWidgetInnerRadius">10dp</item>
+        <item name="android:background">@drawable/rounded_rectangle</item>
     </style>
     <style name="Theme.WeatherWidget.topContainer">
         <item name="appWidgetRadius">10dp</item>
-        <item name="appWidgetPadding">5dp</item>
+        <item name="appWidgetPadding">0dp</item>
         <item name="appWidgetInnerRadius">10dp</item>
     </style>
 
