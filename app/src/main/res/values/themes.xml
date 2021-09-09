@@ -15,9 +15,14 @@
     </style>
 
     <style name="Theme.WeatherWidget.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
-        <item name="appWidgetRadius">8dp</item>
-        <item name="appWidgetPadding">4dp</item>
-        <item name="appWidgetInnerRadius">4dp</item>
+        <item name="appWidgetRadius">10dp</item>
+        <item name="appWidgetPadding">5dp</item>
+        <item name="appWidgetInnerRadius">10dp</item>
+    </style>
+    <style name="Theme.WeatherWidget.topContainer">
+        <item name="appWidgetRadius">10dp</item>
+        <item name="appWidgetPadding">5dp</item>
+        <item name="appWidgetInnerRadius">10dp</item>
     </style>
 
     <style name="Theme.WeatherWidget.AppWidgetContainer" parent="Theme.WeatherWidget.AppWidgetContainerParent" />

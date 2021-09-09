@@ -7,8 +7,9 @@
         <entry key="..\:/Prog/AndroidWorkPlace/WeatherWidget/app/src/main/res/layout/default_widget.xml" value="0.20520833333333333" />
         <entry key="..\:/Prog/AndroidWorkPlace/WeatherWidget/app/src/main/res/layout/weather_widget.xml" value="0.276268115942029" />
         <entry key="..\:/Prog/AndroidWorkPlace/WeatherWidget/app/src/main/res/layout/widget.xml" value="0.20520833333333333" />
-        <entry key="..\:/Prog/AndroidWorkPlace/WeatherWindWidget/app/src/main/res/layout/activity_main.xml" value="0.2246376811594203" />
-        <entry key="..\:/Prog/AndroidWorkPlace/WeatherWindWidget/app/src/main/res/layout/widget.xml" value="0.30027173913043476" />
+        <entry key="..\:/Prog/AndroidWorkPlace/WeatherWindWidget/app/src/main/res/layout/activity_main.xml" value="0.30027173913043476" />
+        <entry key="..\:/Prog/AndroidWorkPlace/WeatherWindWidget/app/src/main/res/layout/widget.xml" value="0.33" />
+        <entry key="..\:/Prog/AndroidWorkPlace/WeatherWindWidget/app/src/main/res/xml/provider_paths.xml" value="0.2015625" />
       </map>
     </option>
   </component>
