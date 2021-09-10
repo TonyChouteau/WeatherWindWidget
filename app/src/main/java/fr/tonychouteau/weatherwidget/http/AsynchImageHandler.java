@@ -39,13 +39,11 @@ public class AsynchImageHandler extends AsyncTask<String, Void, Bitmap> {
 
     private Bitmap download_Image(String image_url) {
         try {
-            Log.d("Test", "1");
             URL url = new URL(image_url);
             HttpURLConnection connection  = (HttpURLConnection) url.openConnection();
 
             connection.connect();
             int resCode = connection.getResponseCode();
-            Log.d("Test", "2");
 
             if (resCode == HttpURLConnection.HTTP_OK) {
                 InputStream is = connection.getInputStream();
@@ -53,7 +51,6 @@ public class AsynchImageHandler extends AsyncTask<String, Void, Bitmap> {
 
                 connection.disconnect();
 
-                Log.d("Test", "3");
                 return img;
             }
         } catch (IOException e) {
