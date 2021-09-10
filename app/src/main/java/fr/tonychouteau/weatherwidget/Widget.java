@@ -36,7 +36,6 @@ public class Widget extends AppWidgetProvider {
         viewManager = new ViewManager(contextManager);
 
         initOnClickEvent();
-        updateVersionTime();
         updateWeather();
 
         // Instruct the widget manager to update the widget
@@ -64,6 +63,8 @@ public class Widget extends AppWidgetProvider {
                 this.contextManager.views.setTextViewText(R.id.wind_direction, weather.getWindDirection());
 
                 this.viewManager.updateImageView(R.id.sky_view, weather.getIconImage());
+
+                updateVersionTime();
             });
         });
     }
