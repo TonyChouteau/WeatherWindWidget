@@ -2,86 +2,87 @@ package fr.tonychouteau.weatherwidget.weather;
 
 import android.graphics.Bitmap;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.function.Consumer;
 
 import fr.tonychouteau.weatherwidget.http.AsynchImageHandler;
 import fr.tonychouteau.weatherwidget.http.AsynchJsonHandler;
+import fr.tonychouteau.weatherwidget.http.UrlHelper;
+import fr.tonychouteau.weatherwidget.weather.definition.Weather;
 
 public class OpenWeatherHandler {
-
-    //=================================
-    // Static
-    //=================================
-
-    // Base API URL
-    private final String BASE_API_URL = "https://api.openweathermap.org/data/2.5/weather/";
-    private final String LANG = "lang=";
-    private String langParam(String lang) {
-        return LANG + lang;
-    }
-    private final String API = "appid=";
-    private String apiParam(String apikey) {
-        return API + apikey;
-    }
-    private final String CITY = "q=";
-    private String cityParam(String city) {
-        return CITY + city;
-    }
-    private final String METRIC = "units=metric";
-
-    private String makeParams(String ...params) {
-        String params_url = "?";
-        for (String param: params) {
-            params_url += param + "&";
-        }
-        return params_url;
-    }
-
-    // Image URLs
-    private final String BASE_IMG_URL = "https://openweathermap.org/img/wn/";
-
-    private final String PNG_URL = ".png";
-    private final String X2_URL = "@2x";
-    private final String X4_URL = "@4x";
 
     //=================================
     // Non-Static
     //=================================
 
     private Weather weather;
-    private String lang;
+    private String apiKey;
+
+    private UrlHelper weatherNowUrl;
+    private UrlHelper skyViewUrl;
 
     //=================================
     // Constructor
     //=================================
 
-    public OpenWeatherHandler(Weather weather, String lang) {
-        this.weather = weather;
-        this.lang = lang;
+    public OpenWeatherHandler(String apiKey) {
+        this.apiKey = apiKey;
+        this.weather = new Weather("Lannion");
+
+        this.weatherNowUrl = new UrlHelper(ApiHelper.API_URL)
+                .param(ApiHelper.CITY, this.weather.getCity())
+                .param(ApiHelper.API_KEY, this.apiKey)
+                .param(ApiHelper.UNITS, ApiHelper.METRIC);
+
+        this.skyViewUrl = new UrlHelper(ApiHelper.IMG_URL)
+                .add("icon", this.weather.getIcon())
+                .add(ApiHelper.X4_URL)
+                .add(ApiHelper.PNG_URL);
     }
 
     //=================================
     // Public Methods
     //=================================
 
-    public void withWeather(Consumer<JSONObject> consumer) {
+    public void withWeather(Consumer<Weather> consumer) {
         AsynchJsonHandler asyncHandler = new AsynchJsonHandler();
-        asyncHandler.setConsumer(consumer);
-        String api_url = BASE_API_URL + makeParams(
-                cityParam(this.weather.getCity()),
-                apiParam("<apikey>"),
-                langParam("fr"),
-                METRIC
-        );
-        asyncHandler.execute(api_url);
+        asyncHandler.setConsumer(json -> {
+            if (json == null) return;
+
+            try {
+                JSONObject weather = (JSONObject) json.getJSONArray("weather").get(0);
+                String iconId = weather.getString("icon");
+
+                JSONObject wind = json.getJSONObject("wind");
+                double windSpeed = wind.getDouble("speed");
+                int windDirection = wind.getInt("deg");
+
+                this.weather.updateWeather(iconId, windSpeed, windDirection);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            if (this.weather.skyViewChanged()) {
+                this.withSkyView(skyView -> {
+                    this.weather.updateSkyView(skyView);
+
+                    consumer.accept(this.weather);
+                });
+            } else {
+                consumer.accept(this.weather);
+            }
+        });
+        asyncHandler.execute(this.weatherNowUrl.make());
     }
 
-    public void withIcon(Consumer<Bitmap> consumer) {
+    public void withSkyView(Consumer<Bitmap> consumer) {
         AsynchImageHandler asynchWeather = new AsynchImageHandler();
         asynchWeather.setConsumer(consumer);
-        String image_url = BASE_IMG_URL + this.weather.getIcon() + X4_URL + PNG_URL;
-        asynchWeather.execute(image_url);
+        asynchWeather.execute(skyViewUrl
+                .changePath("icon", this.weather.getIcon())
+                .make());
     }
 }

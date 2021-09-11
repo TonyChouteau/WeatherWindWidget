@@ -17,7 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.function.Consumer;
 
-public class AsynchImageHandler extends AsyncTask<String, Void, Bitmap> {
+public class AsynchImageHandler extends AsyncTask<URL, Void, Bitmap> {
 
     private Consumer<Bitmap> consumer;
 
@@ -32,14 +32,13 @@ public class AsynchImageHandler extends AsyncTask<String, Void, Bitmap> {
     }
 
     @Override
-    protected Bitmap doInBackground(String... urls) {
+    protected Bitmap doInBackground(URL... urls) {
         return download_Image(urls[0]);
     }
 
 
-    private Bitmap download_Image(String image_url) {
+    private Bitmap download_Image(URL url) {
         try {
-            URL url = new URL(image_url);
             HttpURLConnection connection  = (HttpURLConnection) url.openConnection();
 
             connection.connect();

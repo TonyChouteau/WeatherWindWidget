@@ -5,8 +5,8 @@
     style="@style/Widget.WeatherWidget.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/Theme.WeatherWidget.AppWidgetContainer"
-    android:background="@drawable/rounded_rectangle">
+    android:background="@drawable/rounded_rectangle_container"
+    android:theme="@style/Theme.WeatherWidget.AppWidgetContainer">
 
     <RelativeLayout
         android:id="@+id/top"
@@ -15,11 +15,13 @@
         android:background="@drawable/rounded_rectangle">
 
         <LinearLayout
+            android:id="@+id/top_top"
             android:layout_width="match_parent"
             android:layout_height="113dp"
             android:orientation="horizontal">
 
             <RelativeLayout
+                android:id="@+id/image_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -31,37 +33,24 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/data_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="0.5">
 
-                <TextView
-                    android:id="@+id/wind_speed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:textColor="#FFFFFF"
-                    android:textSize="25dp" />
+                <LinearLayout
+                    android:id="@+id/list_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
+                </LinearLayout>
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/wind_direction"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:textColor="#FFFFFF"
-                    android:textSize="25dp" />
-
-            </RelativeLayout>
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/top_bottom"
             android:layout_width="match_parent"
             android:layout_height="23dp"
             android:layout_marginTop="113dp">
@@ -73,7 +62,8 @@
                 android:layout_centerInParent="true"
                 android:text="-"
                 android:textColor="#373737"
-                android:textSize="15sp" />
+                android:textSize="13sp"
+                tools:textColor="#FFFFFF" />
         </RelativeLayout>
 
     </RelativeLayout>

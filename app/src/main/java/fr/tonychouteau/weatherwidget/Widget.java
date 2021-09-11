@@ -5,15 +5,15 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
-import fr.tonychouteau.weatherwidget.utils.ContextManager;
-import fr.tonychouteau.weatherwidget.utils.ViewManager;
-import fr.tonychouteau.weatherwidget.weather.Weather;
+import fr.tonychouteau.weatherwidget.manager.ContextManager;
+import fr.tonychouteau.weatherwidget.manager.ViewManager;
+import fr.tonychouteau.weatherwidget.manager.definition.Table;
+import fr.tonychouteau.weatherwidget.weather.OpenWeatherHandler;
 
 /**
  * Implementation of App Widget functionality.
@@ -22,6 +22,10 @@ public class Widget extends AppWidgetProvider {
 
     private ContextManager contextManager;
     private ViewManager viewManager;
+
+    static private OpenWeatherHandler weatherHandler;
+    static private Table table;
+    static private Boolean firstUpdate = true;
 
     //=================================
     // Update Widget
@@ -32,40 +36,31 @@ public class Widget extends AppWidgetProvider {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
 
-        contextManager = new ContextManager(context, views, appWidgetId);
-        viewManager = new ViewManager(contextManager);
+        if (firstUpdate) {
+            weatherHandler = new OpenWeatherHandler(context.getString(R.string.api_key));
+            table = new Table();
+            firstUpdate = false;
+        }
+
+        this.contextManager = new ContextManager(context, views, appWidgetId, appWidgetManager);
+        this.viewManager = new ViewManager(contextManager, table);
 
         initOnClickEvent();
         updateWeather();
-
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
-    }
-
-    //=================================
-    // Update Version
-
-    private void updateVersionTime() {
-        Date currentTime = Calendar.getInstance().getTime();
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy h:mm:ss");
-        contextManager.views.setTextViewText(R.id.last_update, format.format(currentTime));
     }
 
     //=================================
     // Update Weather
 
     private void updateWeather() {
-        Weather weather = new Weather("Lannion");
+        weatherHandler.withWeather(weather -> {
+            this.viewManager.updateImageView(R.id.sky_view, weather.getSkyView());
+            this.viewManager.updateTable(weather.formatWindSpeed(), weather.formatWindDirection());
+//            this.viewManager.setText(R.id.wind_speed, weather.formatWindSpeed());
+//            this.viewManager.setText(R.id.wind_direction, weather.formatWindDirection());
 
-        weather.updateWeather(() -> {
-            weather.getIconImage(() -> {
-                this.contextManager.views.setTextViewText(R.id.wind_speed, weather.getWindSpeed());
-                this.contextManager.views.setTextViewText(R.id.wind_direction, weather.getWindDirection());
-
-                this.viewManager.updateImageView(R.id.sky_view, weather.getIconImage());
-
-                updateVersionTime();
-            });
+            this.viewManager.updateVersionTime();
+            this.viewManager.updateAppWidget();
         });
     }
 

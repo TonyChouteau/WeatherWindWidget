@@ -17,7 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.function.Consumer;
 
-public class AsynchJsonHandler extends AsyncTask<String, Void, JSONObject> {
+public class AsynchJsonHandler extends AsyncTask<URL, Void, JSONObject> {
 
     private Consumer<JSONObject> consumer;
 
@@ -32,14 +32,13 @@ public class AsynchJsonHandler extends AsyncTask<String, Void, JSONObject> {
     }
 
     @Override
-    protected JSONObject doInBackground(String... urls) {
+    protected JSONObject doInBackground(URL ...urls) {
         return get_json(urls[0]);
     }
 
 
-    private JSONObject get_json(String image_url) {
+    private JSONObject get_json(URL url) {
         try {
-            URL url = new URL(image_url);
             HttpURLConnection connection  = (HttpURLConnection) url.openConnection();
 
             connection.connect();
