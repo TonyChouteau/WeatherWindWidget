@@ -25,8 +25,8 @@ public class Table {
         this.widgetId = widgetId;
     }
 
-    public void addRow(RemoteViews rowView, RemoteViews[] remoteViews) {
-        Row row = new Row(rowView, remoteViews);
+    public void addRow(RemoteViews rowView) {
+        Row row = new Row(rowView);
         rows.add(row);
     }
 

@@ -18,6 +18,9 @@ import fr.tonychouteau.weatherwidget.manager.definition.Table;
 
 public class ViewManager {
 
+    //https://api.openweathermap.org/data/2.5/onecall?lat=48.73&lon=3.46&appid=api_key&exclude=minutely,daily
+    //https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=48.73&lon=3.46&appid=api_key&dt=today
+
     private AppWidgetTarget appWidgetTarget;
     private ContextManager contextManager;
 
@@ -66,30 +69,20 @@ public class ViewManager {
     public void makeRow() {
         RemoteViews rowView = new RemoteViews(this.contextManager.context.getPackageName(), R.layout.row);
 
-        RemoteViews[] cells = new RemoteViews[3];
-        RemoteViews[] textViews = new RemoteViews[3];
-        for (int i = 0; i < Row.SIZE; i++) {
-            cells[i] = new RemoteViews(this.contextManager.context.getPackageName(), R.layout.cell);
-            textViews[i] = new RemoteViews(this.contextManager.context.getPackageName(), R.layout.text);
-            cells[i].addView(R.id.cell, textViews[i]);
-            rowView.addView(R.id.row, cells[i]);
-        }
-
-        this.table.addRow(rowView, textViews);
+        this.table.addRow(rowView);
     }
 
     public void updateTable(String speed, String direction) {
-
-        this.makeRow();
-        if (this.table.size() > 3) {
-            this.table.clear();
-        }
-
-        this.contextManager.views.removeAllViews(R.id.list_container);
+        this.contextManager.views.removeAllViews(R.id.list_container_forecast);
         this.table.forEach(row -> {
-            this.contextManager.views.addView(R.id.list_container, row.getRowView());
-            row.getTextView(0).setTextViewText(R.id.text, speed);
-            row.getTextView(1).setTextViewText(R.id.text, direction);
+            RemoteViews rowView =  row.getRowView();
+            this.contextManager.views.addView(R.id.list_container_forecast, rowView);
+            rowView.setTextViewText(R.id.text_1, speed);
+            rowView.setTextViewText(R.id.text_2, direction);
+            rowView.setTextViewText(R.id.text_2, direction);
         });
+
+        this.contextManager.views.setTextViewText(R.id.current_speed, speed);
+        this.contextManager.views.setTextViewText(R.id.current_direction, direction);
     }
 }
