@@ -1,5 +1,6 @@
 package fr.tonychouteau.weatherwidget;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -63,6 +64,7 @@ public class Widget extends AppWidgetProvider {
     // On Click
     //=================================
 
+    @SuppressLint("UnspecifiedImmutableFlag")
     public void initOnClickEvent() {
         Intent intentUpdate = new Intent(contextManager.context, Widget.class);
         intentUpdate.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
