@@ -1,4 +1,4 @@
-package fr.tonychouteau.weatherwidget.http;
+package fr.tonychouteau.weatherwidget.remote.http;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -38,6 +38,13 @@ public class UrlHelper {
 
     public UrlHelper param(String param, String value) {
         params.put(param, value);
+        this.hasChanged = true;
+
+        return this;
+    }
+
+    public UrlHelper param(String param, Double value) {
+        params.put(param, Double.toString(value));
         this.hasChanged = true;
 
         return this;

@@ -1,16 +1,17 @@
 package fr.tonychouteau.weatherwidget.weather;
 
-import android.graphics.Bitmap;
-
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import fr.tonychouteau.weatherwidget.http.AsynchImageHandler;
-import fr.tonychouteau.weatherwidget.http.AsynchJsonHandler;
-import fr.tonychouteau.weatherwidget.http.UrlHelper;
+import fr.tonychouteau.weatherwidget.remote.http.AsynchJsonHandler;
+import fr.tonychouteau.weatherwidget.remote.http.UrlHelper;
+import fr.tonychouteau.weatherwidget.weather.definition.location.Coords;
 import fr.tonychouteau.weatherwidget.weather.definition.Weather;
+import fr.tonychouteau.weatherwidget.weather.definition.WeatherDataContainer;
 
 public class OpenWeatherHandler {
 
@@ -18,71 +19,128 @@ public class OpenWeatherHandler {
     // Non-Static
     //=================================
 
-    private Weather weather;
     private String apiKey;
 
     private UrlHelper weatherNowUrl;
-    private UrlHelper skyViewUrl;
+    private UrlHelper forecastUrl;
+    private UrlHelper historyUrl;
+
+    private WeatherDataContainer weatherDataContainer;
+
+    private static int MAX_DATA = 10;
 
     //=================================
     // Constructor
     //=================================
 
+    //https://api.openweathermap.org/data/2.5/weather?q=Lannion&appid=api_key
+    //https://api.openweathermap.org/data/2.5/onecall?lat=48.73&lon=3.46&appid=api_key&exclude=minutely,daily
+    //https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=48.73&lon=3.46&appid=api_key&dt=today
+
     public OpenWeatherHandler(String apiKey) {
         this.apiKey = apiKey;
-        this.weather = new Weather("Lannion");
+        this.weatherDataContainer = new WeatherDataContainer("Lannion");
 
-        this.weatherNowUrl = new UrlHelper(ApiHelper.API_URL)
-                .param(ApiHelper.CITY, this.weather.getCity())
+        this.weatherNowUrl = new UrlHelper(ApiHelper.API_URL + ApiHelper.WEATHER_URL)
+                .param(ApiHelper.CITY, this.weatherDataContainer.getCity())
                 .param(ApiHelper.API_KEY, this.apiKey)
                 .param(ApiHelper.UNITS, ApiHelper.METRIC);
 
-        this.skyViewUrl = new UrlHelper(ApiHelper.IMG_URL)
-                .add("icon", this.weather.getIcon())
-                .add(ApiHelper.X4_URL)
-                .add(ApiHelper.PNG_URL);
+        this.forecastUrl = new UrlHelper(ApiHelper.API_URL + ApiHelper.FORECAST_URL)
+                .param(ApiHelper.API_KEY, this.apiKey)
+                .param(ApiHelper.EXCLUDE, "minutely,daily");
+
+        this.historyUrl = new UrlHelper(ApiHelper.API_URL + ApiHelper.HISTORY_URL)
+                .param(ApiHelper.API_KEY, this.apiKey);
     }
 
     //=================================
     // Public Methods
     //=================================
 
-    public void withWeather(Consumer<Weather> consumer) {
+    public Weather makeWeather(JSONObject json) throws JSONException {
+        Weather weather = new Weather();
+
+        JSONObject weatherJson = (JSONObject) json.getJSONArray("weather").get(0);
+        String iconId = weatherJson.getString("icon");
+
+        double windSpeed;
+        int windDirection;
+        if (json.has("wind")) {
+            JSONObject wind = json.getJSONObject("wind");
+            windSpeed = wind.getDouble("speed");
+            windDirection = wind.getInt("deg");
+        } else {
+            windSpeed = json.getDouble("wind_speed");
+            windDirection = json.getInt("wind_deg");
+        }
+
+        weather.updateWeather(iconId, windSpeed, windDirection);
+
+        return weather;
+    }
+
+    public void withWeatherData(Consumer<WeatherDataContainer> consumer, int dataCount) {
         AsynchJsonHandler asyncHandler = new AsynchJsonHandler();
         asyncHandler.setConsumer(json -> {
             if (json == null) return;
 
+            Weather weather = null;
             try {
-                JSONObject weather = (JSONObject) json.getJSONArray("weather").get(0);
-                String iconId = weather.getString("icon");
+                weather = this.makeWeather(json);
 
-                JSONObject wind = json.getJSONObject("wind");
-                double windSpeed = wind.getDouble("speed");
-                int windDirection = wind.getInt("deg");
+                JSONObject coords = json.getJSONObject("coord");
+                this.weatherDataContainer.setCoords(new Coords(
+                        coords.getDouble("lat"),
+                        coords.getDouble("lon")
+                ));
 
-                this.weather.updateWeather(iconId, windSpeed, windDirection);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            if (this.weather.skyViewChanged()) {
-                this.withSkyView(skyView -> {
-                    this.weather.updateSkyView(skyView);
-
-                    consumer.accept(this.weather);
-                });
-            } else {
-                consumer.accept(this.weather);
-            }
+            this.weatherDataContainer.setCurrent(weather);
+            this.withForecast(consumer, dataCount);
         });
         asyncHandler.execute(this.weatherNowUrl.make());
     }
 
-    public void withSkyView(Consumer<Bitmap> consumer) {
-        AsynchImageHandler asynchWeather = new AsynchImageHandler();
-        asynchWeather.setConsumer(consumer);
-        asynchWeather.execute(skyViewUrl
-                .changePath("icon", this.weather.getIcon())
-                .make());
+    public void withForecast(Consumer<WeatherDataContainer> consumer, int dataCount) {
+        AsynchJsonHandler asynchHandler = new AsynchJsonHandler();
+        asynchHandler.setConsumer(json -> {
+            if (json == null) return;
+
+            ArrayList<Weather> hourlyWeather = new ArrayList<>();
+            try {
+                JSONArray hourlyWeatherJson = json.getJSONArray("hourly");
+                for (int i = 1; i < Math.min(MAX_DATA, dataCount) + 1; i++) {
+                    hourlyWeather.add(this.makeWeather(hourlyWeatherJson.getJSONObject(i)));
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            this.weatherDataContainer.setForecast(hourlyWeather);
+            this.withHistory(consumer, dataCount);
+        });
+        asynchHandler.execute(
+                this.forecastUrl
+                        .param(ApiHelper.LAT, this.weatherDataContainer.getCoords().lat)
+                        .param(ApiHelper.LON, this.weatherDataContainer.getCoords().lon)
+                        .make()
+        );
     }
+
+    public void withHistory(Consumer<WeatherDataContainer> consumer, int dataCount) {
+        consumer.accept(this.weatherDataContainer);
+    }
+
+//    public void withSkyView(Consumer<Bitmap> consumer) {
+//        AsynchImageHandler asynchWeather = new AsynchImageHandler();
+//        asynchWeather.setConsumer(consumer);
+//        asynchWeather.execute(skyViewUrl
+//                .changePath("icon", this.weather.getIcon())
+//                .make());
+//    }
 }

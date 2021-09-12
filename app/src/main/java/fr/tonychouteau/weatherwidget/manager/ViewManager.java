@@ -15,24 +15,31 @@ import java.util.Locale;
 import fr.tonychouteau.weatherwidget.R;
 import fr.tonychouteau.weatherwidget.manager.definition.Row;
 import fr.tonychouteau.weatherwidget.manager.definition.Table;
+import fr.tonychouteau.weatherwidget.remote.file.ImageHandler;
+import fr.tonychouteau.weatherwidget.weather.definition.Weather;
 
 public class ViewManager {
-
-    //https://api.openweathermap.org/data/2.5/onecall?lat=48.73&lon=3.46&appid=api_key&exclude=minutely,daily
-    //https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=48.73&lon=3.46&appid=api_key&dt=today
 
     private AppWidgetTarget appWidgetTarget;
     private ContextManager contextManager;
 
     private Table table;
 
+    //=================================
+    // Constructor
+    //=================================
+
     public ViewManager(ContextManager contextManager, Table table) {
         this.contextManager = contextManager;
         this.table = table;
     }
 
-    public void updateImageView(int imageView, Bitmap image) {
-        appWidgetTarget = new AppWidgetTarget(contextManager.context, imageView, contextManager.views, contextManager.appWidgetId) {
+    //=================================
+    // Utils
+    //=================================
+
+    public void updateImageView(RemoteViews views, int imageView, Bitmap image) {
+        appWidgetTarget = new AppWidgetTarget(contextManager.context, imageView, views, contextManager.appWidgetId) {
             @Override
             public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                 super.onResourceReady(resource, transition);
@@ -49,15 +56,12 @@ public class ViewManager {
         this.contextManager.views.setTextViewText(textView, text);
     }
 
-    public void updateAppWidget() {
-        this.contextManager.appWidgetManager.updateAppWidget(
-                this.contextManager.appWidgetId,
-                this.contextManager.views
-        );
-    }
+    //=================================
+    // Update
+    //=================================
 
     public void updateVersionTime() {
-        Date currentTime = Calendar.getInstance().getTime();
+        Date currentTime = new Date();
         SimpleDateFormat format = new SimpleDateFormat("dd-MM h:mm", Locale.FRANCE);
         this.setText(R.id.last_update, format.format(currentTime));
     }
@@ -65,6 +69,23 @@ public class ViewManager {
 //    public int getRessourceId(String string_id) {
 //        return this.contextManager.context.getResources().getIdentifier(string_id, "id", this.contextManager.context.getPackageName());
 //    }
+
+    public void displayCurrentWether(Weather weather) {
+        this.updateImageView(this.contextManager.views, R.id.sky_view, ImageHandler.getBitmapFromAsset(this.contextManager.context, weather.getSkyViewPath()));
+        this.contextManager.views.setTextViewText(R.id.current_speed, weather.formatWindSpeed());
+        this.contextManager.views.setTextViewText(R.id.current_direction, weather.formatWindDirection());
+    }
+
+    public void updateAppWidget() {
+        this.contextManager.appWidgetManager.updateAppWidget(
+                this.contextManager.appWidgetId,
+                this.contextManager.views
+        );
+    }
+
+    //=================================
+    // Handle Table
+    //=================================
 
     public void makeRow() {
         RemoteViews rowView = new RemoteViews(this.contextManager.context.getPackageName(), R.layout.row);
@@ -87,8 +108,5 @@ public class ViewManager {
             rowView.setTextViewText(R.id.text_2, direction);
             rowView.setTextViewText(R.id.text_2, direction);
         });
-
-        this.contextManager.views.setTextViewText(R.id.current_speed, speed);
-        this.contextManager.views.setTextViewText(R.id.current_direction, direction);
     }
 }

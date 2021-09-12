@@ -20,6 +20,8 @@ import fr.tonychouteau.weatherwidget.weather.OpenWeatherHandler;
  */
 public class Widget extends AppWidgetProvider {
 
+    private int DATA_COUNT= 10;
+
     private ContextManager contextManager;
     private ViewManager viewManager;
 
@@ -53,15 +55,21 @@ public class Widget extends AppWidgetProvider {
     // Update Weather
 
     private void updateWeather() {
-        weatherHandler.withWeather(weather -> {
-            this.viewManager.updateImageView(R.id.sky_view, weather.getSkyView());
-            this.viewManager.updateTable(weather.formatWindSpeed(), weather.formatWindDirection());
-//            this.viewManager.setText(R.id.wind_speed, weather.formatWindSpeed());
-//            this.viewManager.setText(R.id.wind_direction, weather.formatWindDirection());
+        weatherHandler.withWeatherData(weatherDataContainer -> {
+            this.viewManager.displayCurrentWether(weatherDataContainer.getCurrent());
 
             this.viewManager.updateVersionTime();
             this.viewManager.updateAppWidget();
-        });
+        }, DATA_COUNT);
+//        weatherHandler.withWeather(weather -> {
+//            this.viewManager.updateImageView(R.id.sky_view, weather.getSkyView());
+//            this.viewManager.updateTable(weather.formatWindSpeed(), weather.formatWindDirection());
+//            this.viewManager.setText(R.id.wind_speed, weather.formatWindSpeed());
+//            this.viewManager.setText(R.id.wind_direction, weather.formatWindDirection());
+//
+//            this.viewManager.updateVersionTime();
+//            this.viewManager.updateAppWidget();
+//        });
     }
 
     //=================================

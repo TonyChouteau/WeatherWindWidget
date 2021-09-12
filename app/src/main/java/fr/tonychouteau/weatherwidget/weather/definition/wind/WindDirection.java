@@ -1,4 +1,4 @@
-package fr.tonychouteau.weatherwidget.weather.definition;
+package fr.tonychouteau.weatherwidget.weather.definition.wind;
 
 public class WindDirection {
 

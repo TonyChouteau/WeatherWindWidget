@@ -1,16 +1,12 @@
-package fr.tonychouteau.weatherwidget.http;
+package fr.tonychouteau.weatherwidget.remote.http;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Environment;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
