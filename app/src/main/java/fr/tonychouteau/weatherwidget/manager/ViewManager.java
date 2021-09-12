@@ -60,12 +60,6 @@ public class ViewManager {
     // Update
     //=================================
 
-    public void updateVersionTime() {
-        Date currentTime = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM h:mm", Locale.FRANCE);
-        this.setText(R.id.last_update, format.format(currentTime));
-    }
-
 //    public int getRessourceId(String string_id) {
 //        return this.contextManager.context.getResources().getIdentifier(string_id, "id", this.contextManager.context.getPackageName());
 //    }
@@ -74,6 +68,7 @@ public class ViewManager {
         this.updateImageView(this.contextManager.views, R.id.sky_view, ImageHandler.getBitmapFromAsset(this.contextManager.context, weather.getSkyViewPath()));
         this.contextManager.views.setTextViewText(R.id.current_speed, weather.formatWindSpeed());
         this.contextManager.views.setTextViewText(R.id.current_direction, weather.formatWindDirection());
+        this.setText(R.id.last_update, weather.formatDate("dd-MM HH:mm"));
     }
 
     public void updateAppWidget() {

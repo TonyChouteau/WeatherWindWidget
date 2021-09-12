@@ -1,8 +1,11 @@
 package fr.tonychouteau.weatherwidget.weather.definition;
 
-import android.graphics.Bitmap;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
+
+import fr.tonychouteau.weatherwidget.weather.ApiHelper;
+import fr.tonychouteau.weatherwidget.weather.definition.wind.Wind;
 
 public class Weather {
 
@@ -10,22 +13,18 @@ public class Weather {
     // NON-STATIC
     //=================================
 
-    private String city;
-
     private String iconId;
-    private Bitmap skyView;
+    private String skyViewPath;
 
     private Wind wind;
-
-    private Boolean skyViewChanged;
+    private Date date;
 
     //=================================
     // Constructor
     //=================================
 
-    public Weather(String city) {
-        this.city = city;
-        this.wind = wind;
+    public Weather() {
+        this.date = new Date();
     }
 
     //=================================
@@ -33,13 +32,9 @@ public class Weather {
     //=================================
 
     public void updateWeather(String iconId, double windSpeed, int windDirection) {
-        this.skyViewChanged = !(iconId.equals(this.iconId));
         this.iconId = iconId;
+        this.skyViewPath = "skyviews/" + iconId.replace("n", "d") + ApiHelper.X2 + ApiHelper.PNG;
         this.wind = new Wind(windSpeed, windDirection);
-    }
-
-    public void updateSkyView(Bitmap skyView) {
-        this.skyView = skyView;
     }
 
     //=================================
@@ -50,10 +45,6 @@ public class Weather {
         return iconId;
     }
 
-    public String getCity() {
-        return city;
-    }
-
     public String getWindSpeed() {
         return String.valueOf(this.wind.speed);
     }
@@ -62,12 +53,8 @@ public class Weather {
         return String.valueOf(this.wind.direction);
     }
 
-    public Bitmap getSkyView() {
-        return skyView;
-    }
-
-    public Boolean skyViewChanged() {
-        return this.skyViewChanged;
+    public String getSkyViewPath() {
+        return skyViewPath;
     }
 
     //=================================
@@ -80,5 +67,10 @@ public class Weather {
 
     public String formatWindDirection() {
         return String.format(Locale.FRANCE, "%s", this.wind.direction.name);
+    }
+
+    public String formatDate(String formatString) {
+        SimpleDateFormat format = new SimpleDateFormat(formatString, Locale.FRANCE);
+        return format.format(this.date);
     }
 }

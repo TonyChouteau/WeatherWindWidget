@@ -5,10 +5,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 
 import fr.tonychouteau.weatherwidget.manager.ContextManager;
 import fr.tonychouteau.weatherwidget.manager.ViewManager;
@@ -20,7 +17,7 @@ import fr.tonychouteau.weatherwidget.weather.OpenWeatherHandler;
  */
 public class Widget extends AppWidgetProvider {
 
-    private int DATA_COUNT= 10;
+    private static final int DATA_COUNT = 10;
 
     private ContextManager contextManager;
     private ViewManager viewManager;
@@ -58,18 +55,8 @@ public class Widget extends AppWidgetProvider {
         weatherHandler.withWeatherData(weatherDataContainer -> {
             this.viewManager.displayCurrentWether(weatherDataContainer.getCurrent());
 
-            this.viewManager.updateVersionTime();
             this.viewManager.updateAppWidget();
         }, DATA_COUNT);
-//        weatherHandler.withWeather(weather -> {
-//            this.viewManager.updateImageView(R.id.sky_view, weather.getSkyView());
-//            this.viewManager.updateTable(weather.formatWindSpeed(), weather.formatWindDirection());
-//            this.viewManager.setText(R.id.wind_speed, weather.formatWindSpeed());
-//            this.viewManager.setText(R.id.wind_direction, weather.formatWindDirection());
-//
-//            this.viewManager.updateVersionTime();
-//            this.viewManager.updateAppWidget();
-//        });
     }
 
     //=================================
