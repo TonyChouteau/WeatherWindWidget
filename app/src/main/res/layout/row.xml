@@ -1,62 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/row"
     android:layout_width="match_parent"
     android:layout_height="20dp"
-    android:orientation="horizontal"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/row_content"
+        android:layout_width="match_parent"
+        android:layout_height="19dp"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/cell_0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/text_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="-"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/cell_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/text_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="-"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/cell_2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/text_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="-"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/cell_0"
+        android:id="@+id/border_bottom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-
-        <TextView
-            android:id="@+id/text_0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="-"
-            android:textColor="#FFFFFF"
-            android:textSize="13sp" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/cell_1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-
-        <TextView
-            android:id="@+id/text_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="-"
-            android:textColor="#FFFFFF"
-            android:textSize="13sp" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/cell_2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-
-        <TextView
-            android:id="@+id/text_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="-"
-            android:textColor="#FFFFFF"
-            android:textSize="13sp" />
-
-    </RelativeLayout>
-
+        android:layout_height="1dp"
+        android:background="#22FFFFFF" />
 </LinearLayout>

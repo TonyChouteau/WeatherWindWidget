@@ -58,7 +58,7 @@ public class ViewManager {
 
     public void updateVersionTime() {
         Date currentTime = Calendar.getInstance().getTime();
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy h:mm:ss", Locale.FRANCE);
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM h:mm", Locale.FRANCE);
         this.setText(R.id.last_update, format.format(currentTime));
     }
 
@@ -73,6 +73,12 @@ public class ViewManager {
     }
 
     public void updateTable(String speed, String direction) {
+
+        makeRow();
+        makeRow();
+        makeRow();
+        makeRow();
+
         this.contextManager.views.removeAllViews(R.id.list_container_forecast);
         this.table.forEach(row -> {
             RemoteViews rowView =  row.getRowView();
