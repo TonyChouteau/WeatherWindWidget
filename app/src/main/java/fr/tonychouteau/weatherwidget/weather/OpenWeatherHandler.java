@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.function.Consumer;
 
 import fr.tonychouteau.weatherwidget.remote.http.AsynchJsonHandler;
@@ -75,7 +76,9 @@ public class OpenWeatherHandler {
             windDirection = json.getInt("wind_deg");
         }
 
-        weather.updateWeather(iconId, windSpeed, windDirection);
+        Date date = new Date(json.getInt("dt") * 1000L);
+
+        weather.updateWeather(iconId, windSpeed, windDirection, date);
 
         return weather;
     }

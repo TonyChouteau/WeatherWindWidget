@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import java.util.ArrayList;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import fr.tonychouteau.weatherwidget.R;
@@ -34,9 +35,9 @@ public class Table {
         this.rows.clear();
     }
 
-    public void forEach(Consumer<Row> consumer) {
+    public void forEach(BiConsumer<Integer ,Row> consumer) {
         for (int i = 0; i < rows.size(); i++) {
-            consumer.accept(rows.get(i));
+            consumer.accept(i, rows.get(i));
         }
     }
 

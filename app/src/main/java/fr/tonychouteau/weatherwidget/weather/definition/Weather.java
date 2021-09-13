@@ -24,14 +24,15 @@ public class Weather {
     //=================================
 
     public Weather() {
-        this.date = new Date();
+
     }
 
     //=================================
     // Methods
     //=================================
 
-    public void updateWeather(String iconId, double windSpeed, int windDirection) {
+    public void updateWeather(String iconId, double windSpeed, int windDirection, Date date) {
+        this.date = date;
         this.iconId = iconId;
         this.skyViewPath = "skyviews/" + iconId.replace("n", "d") + ApiHelper.X2 + ApiHelper.PNG;
         this.wind = new Wind(windSpeed, windDirection);
@@ -63,6 +64,10 @@ public class Weather {
 
     public String formatWindSpeed() {
         return String.format(Locale.FRANCE, "%.1f km/h", this.wind.speed * 3.6);
+    }
+
+    public String formatShortWindSpeed() {
+        return String.format(Locale.FRANCE, "%.1f", this.wind.speed * 3.6);
     }
 
     public String formatWindDirection() {

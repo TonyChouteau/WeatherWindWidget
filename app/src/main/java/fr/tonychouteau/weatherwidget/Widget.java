@@ -18,13 +18,12 @@ import fr.tonychouteau.weatherwidget.weather.OpenWeatherHandler;
  */
 public class Widget extends AppWidgetProvider {
 
-    private static final int DATA_COUNT = 10;
+    private static final int DATA_COUNT = 9;
 
     private ContextManager contextManager;
     private ViewManager viewManager;
 
     static private OpenWeatherHandler weatherHandler;
-    static private Table table;
     static private Boolean firstUpdate = true;
 
     //=================================
@@ -38,12 +37,11 @@ public class Widget extends AppWidgetProvider {
 
         if (firstUpdate) {
             weatherHandler = new OpenWeatherHandler(context.getString(R.string.api_key));
-            table = new Table();
             firstUpdate = false;
         }
 
         this.contextManager = new ContextManager(context, views, appWidgetId, appWidgetManager);
-        this.viewManager = new ViewManager(contextManager, table);
+        this.viewManager = new ViewManager(this.contextManager);
 
         initOnClickEvent();
         updateWeather();
@@ -56,6 +54,8 @@ public class Widget extends AppWidgetProvider {
         weatherHandler.withWeatherData(weatherDataContainer -> {
             this.viewManager.displayCurrentWether(weatherDataContainer.getCurrent());
 
+            this.viewManager.displayForecast(weatherDataContainer.getForecast());
+
             this.viewManager.updateAppWidget();
         }, DATA_COUNT);
     }
@@ -66,16 +66,16 @@ public class Widget extends AppWidgetProvider {
 
     @SuppressLint("UnspecifiedImmutableFlag")
     public void initOnClickEvent() {
-        Intent intentUpdate = new Intent(contextManager.context, Widget.class);
+        Intent intentUpdate = new Intent(this.contextManager.context, Widget.class);
         intentUpdate.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 
-        int[] idArray = new int[]{contextManager.appWidgetId};
+        int[] idArray = new int[]{this.contextManager.appWidgetId};
         intentUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, idArray);
 
         PendingIntent pendingUpdate = PendingIntent.getBroadcast(
-                contextManager.context, contextManager.appWidgetId, intentUpdate,
+                this.contextManager.context, this.contextManager.appWidgetId, intentUpdate,
                 PendingIntent.FLAG_UPDATE_CURRENT);
-        contextManager.views.setOnClickPendingIntent(R.id.widget_container, pendingUpdate);
+        this.contextManager.views.setOnClickPendingIntent(R.id.widget_container, pendingUpdate);
     }
 
     //=================================

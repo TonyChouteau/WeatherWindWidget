@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/row"
     android:layout_width="match_parent"
-    android:layout_height="20dp"
+    android:layout_height="14.78dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/row_content"
         android:layout_width="match_parent"
-        android:layout_height="19dp"
+        android:layout_height="13.78dp"
         android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/cell_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2">
+
+            <ImageView
+                android:id="@+id/image_in_row"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/cell_0"
@@ -24,7 +38,7 @@
                 android:layout_centerInParent="true"
                 android:text="-"
                 android:textColor="#FFFFFF"
-                android:textSize="13sp" />
+                android:textSize="10sp" />
 
         </RelativeLayout>
 
@@ -38,11 +52,10 @@
                 android:id="@+id/text_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
                 android:text="-"
                 android:textColor="#FFFFFF"
-                android:textSize="13sp" />
+                android:textSize="10sp" />
 
         </RelativeLayout>
 
@@ -56,11 +69,10 @@
                 android:id="@+id/text_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
                 android:text="-"
                 android:textColor="#FFFFFF"
-                android:textSize="13sp" />
+                android:textSize="10sp" />
 
         </RelativeLayout>
 
