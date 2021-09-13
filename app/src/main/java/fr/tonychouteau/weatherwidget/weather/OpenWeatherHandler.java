@@ -20,15 +20,13 @@ public class OpenWeatherHandler {
     // Non-Static
     //=================================
 
-    private String apiKey;
+    private final UrlHelper weatherNowUrl;
+    private final UrlHelper forecastUrl;
+    private final UrlHelper historyUrl;
 
-    private UrlHelper weatherNowUrl;
-    private UrlHelper forecastUrl;
-    private UrlHelper historyUrl;
+    private final WeatherDataContainer weatherDataContainer;
 
-    private WeatherDataContainer weatherDataContainer;
-
-    private static int MAX_DATA = 10;
+    private static final int MAX_DATA = 10;
 
     //=================================
     // Constructor
@@ -39,20 +37,19 @@ public class OpenWeatherHandler {
     //https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=48.73&lon=3.46&appid=api_key&dt=today
 
     public OpenWeatherHandler(String apiKey) {
-        this.apiKey = apiKey;
         this.weatherDataContainer = new WeatherDataContainer("Lannion");
 
         this.weatherNowUrl = new UrlHelper(ApiHelper.API_URL + ApiHelper.WEATHER_URL)
                 .param(ApiHelper.CITY, this.weatherDataContainer.getCity())
-                .param(ApiHelper.API_KEY, this.apiKey)
+                .param(ApiHelper.API_KEY, apiKey)
                 .param(ApiHelper.UNITS, ApiHelper.METRIC);
 
         this.forecastUrl = new UrlHelper(ApiHelper.API_URL + ApiHelper.FORECAST_URL)
-                .param(ApiHelper.API_KEY, this.apiKey)
+                .param(ApiHelper.API_KEY, apiKey)
                 .param(ApiHelper.EXCLUDE, "minutely,daily");
 
         this.historyUrl = new UrlHelper(ApiHelper.API_URL + ApiHelper.HISTORY_URL)
-                .param(ApiHelper.API_KEY, this.apiKey);
+                .param(ApiHelper.API_KEY, apiKey);
     }
 
     //=================================

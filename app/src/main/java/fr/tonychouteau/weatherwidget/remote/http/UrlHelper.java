@@ -9,10 +9,10 @@ import java.util.HashMap;
 
 public class UrlHelper {
 
-    private String baseUrl;
-    private ArrayList<String> path;
-    private Map<String, Integer> keyToPath;
-    private Map<String, String> params;
+    private final String baseUrl;
+    private final ArrayList<String> path;
+    private final Map<String, Integer> keyToPath;
+    private final Map<String, String> params;
     private URL url;
 
     private Boolean hasChanged;
@@ -44,13 +44,6 @@ public class UrlHelper {
     }
 
     public UrlHelper param(String param, Double value) {
-        params.put(param, Double.toString(value));
-        this.hasChanged = true;
-
-        return this;
-    }
-
-    public UrlHelper param(String param, Long value) {
         params.put(param, Double.toString(value));
         this.hasChanged = true;
 

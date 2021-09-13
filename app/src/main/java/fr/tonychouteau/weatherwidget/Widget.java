@@ -10,7 +10,6 @@ import android.widget.RemoteViews;
 
 import fr.tonychouteau.weatherwidget.manager.ContextManager;
 import fr.tonychouteau.weatherwidget.manager.ViewManager;
-import fr.tonychouteau.weatherwidget.manager.definition.Table;
 import fr.tonychouteau.weatherwidget.weather.OpenWeatherHandler;
 
 /**
@@ -52,7 +51,7 @@ public class Widget extends AppWidgetProvider {
 
     private void updateWeather() {
         weatherHandler.withWeatherData(weatherDataContainer -> {
-            this.viewManager.displayCurrentWether(weatherDataContainer.getCurrent());
+            this.viewManager.displayCurrentWeather(weatherDataContainer.getCurrent());
 
             this.viewManager.displayForecast(weatherDataContainer.getForecast());
             this.viewManager.displayHistory(weatherDataContainer.getHistory());
