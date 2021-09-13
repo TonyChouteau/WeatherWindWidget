@@ -67,16 +67,18 @@ public class OpenWeatherHandler {
 
         double windSpeed;
         int windDirection;
+        Date date;
         if (json.has("wind")) {
+            date = new Date();
             JSONObject wind = json.getJSONObject("wind");
             windSpeed = wind.getDouble("speed");
             windDirection = wind.getInt("deg");
         } else {
             windSpeed = json.getDouble("wind_speed");
             windDirection = json.getInt("wind_deg");
+            date = new Date(json.getInt("dt") * 1000L);
         }
 
-        Date date = new Date(json.getInt("dt") * 1000L);
 
         weather.updateWeather(iconId, windSpeed, windDirection, date);
 
@@ -136,7 +138,32 @@ public class OpenWeatherHandler {
     }
 
     public void withHistory(Consumer<WeatherDataContainer> consumer, int dataCount) {
-        consumer.accept(this.weatherDataContainer);
+        AsynchJsonHandler asynchHandler = new AsynchJsonHandler();
+        asynchHandler.setConsumer(json -> {
+            if (json == null) return;
+
+            ArrayList<Weather> hourlyWeather = new ArrayList<>();
+
+            try {
+                JSONArray hourlyWeatherJson = json.getJSONArray("hourly");
+                for (int i = 1; i < Math.min(MAX_DATA, dataCount) + 1; i++) {
+                    hourlyWeather.add(this.makeWeather(hourlyWeatherJson.getJSONObject(hourlyWeatherJson.length() - i)));
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            this.weatherDataContainer.setHistory(hourlyWeather);
+            consumer.accept(this.weatherDataContainer);
+        });
+        asynchHandler.execute(
+                this.historyUrl
+                        .param(ApiHelper.LAT, this.weatherDataContainer.getCoords().lat)
+                        .param(ApiHelper.LON, this.weatherDataContainer.getCoords().lon)
+                        .param(ApiHelper.DATE, this.weatherDataContainer.getCurrentTimestamp())
+                        .make()
+        );
     }
 
 //    public void withSkyView(Consumer<Bitmap> consumer) {

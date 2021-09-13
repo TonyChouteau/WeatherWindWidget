@@ -62,6 +62,10 @@ public class Weather {
     // Formating
     //=================================
 
+    public String formatTimestamp() {
+        return String.format(Locale.FRANCE, "%.0f", Math.floor(this.date.getTime() / 1000d));
+    }
+
     public String formatWindSpeed() {
         return String.format(Locale.FRANCE, "%.1f km/h", this.wind.speed * 3.6);
     }

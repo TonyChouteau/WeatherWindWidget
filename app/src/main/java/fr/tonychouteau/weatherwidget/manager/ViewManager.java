@@ -80,10 +80,10 @@ public class ViewManager {
         });
     }
 
-    public void displayTable(Table table, ArrayList<Weather> weatherList) {
+    public void displayTable(Table table, ArrayList<Weather> weatherList, int viewId) {
         weatherList.forEach(data -> this.makeRow(table));
 
-        this.displayTable(table, R.id.list_container_forecast, weatherList);
+        this.displayTable(table, viewId, weatherList);
     }
 
     //=================================
@@ -102,11 +102,11 @@ public class ViewManager {
     }
 
     public void displayForecast(ArrayList<Weather> weatherList) {
-        this.displayTable(this.forecastTable, weatherList);
+        this.displayTable(this.forecastTable, weatherList, R.id.list_container_forecast);
     }
 
     public void displayHistory(ArrayList<Weather> weatherList) {
-        this.displayTable(this.historyTable, weatherList);
+        this.displayTable(this.historyTable, weatherList, R.id.list_container_history);
     }
 
     public void updateAppWidget() {

@@ -50,6 +50,13 @@ public class UrlHelper {
         return this;
     }
 
+    public UrlHelper param(String param, Long value) {
+        params.put(param, Double.toString(value));
+        this.hasChanged = true;
+
+        return this;
+    }
+
     public UrlHelper removeParam(String param) {
         params.remove(param);
         this.hasChanged = true;

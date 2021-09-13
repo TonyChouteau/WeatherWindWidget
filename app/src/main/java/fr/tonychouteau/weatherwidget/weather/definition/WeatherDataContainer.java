@@ -53,4 +53,8 @@ public class WeatherDataContainer {
     public void setCoords(Coords coords) {
         this.coords = coords;
     }
+
+    public String getCurrentTimestamp() {
+        return this.current.formatTimestamp();
+    }
 }

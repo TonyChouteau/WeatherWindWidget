@@ -55,6 +55,7 @@ public class Widget extends AppWidgetProvider {
             this.viewManager.displayCurrentWether(weatherDataContainer.getCurrent());
 
             this.viewManager.displayForecast(weatherDataContainer.getForecast());
+            this.viewManager.displayHistory(weatherDataContainer.getHistory());
 
             this.viewManager.updateAppWidget();
         }, DATA_COUNT);
