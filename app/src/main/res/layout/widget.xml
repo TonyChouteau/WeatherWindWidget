@@ -59,9 +59,11 @@
                         <TextView
                             android:id="@+id/current_speed"
                             android:layout_width="wrap_content"
-                            android:layout_height="20dp"
+                            android:layout_height="match_parent"
                             android:layout_centerHorizontal="true"
-                            android:text="-" />
+                            android:text="-"
+                            android:textSize="12dp" />
+
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -72,9 +74,10 @@
                         <TextView
                             android:id="@+id/current_direction"
                             android:layout_width="wrap_content"
-                            android:layout_height="20dp"
+                            android:layout_height="match_parent"
                             android:layout_centerInParent="true"
-                            android:text="-" />
+                            android:text="-"
+                            android:textSize="12dp" />
                     </RelativeLayout>
 
                     <ImageView
@@ -91,10 +94,10 @@
                         <TextView
                             android:id="@+id/last_update"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_centerInParent="true"
                             android:text="-"
-                            android:textSize="13sp" />
+                            android:textSize="12sp" />
                     </RelativeLayout>
 
                 </LinearLayout>
