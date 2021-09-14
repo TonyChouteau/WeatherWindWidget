@@ -84,7 +84,7 @@ public class OpenWeatherHandler {
         return weather;
     }
 
-    public void withWeatherData(Consumer<WeatherDataContainer> consumer) {
+    public void withWeatherData(Consumer<WeatherDataContainer> consumer, int interval) {
         AsynchJsonHandler asyncHandler = new AsynchJsonHandler();
         asyncHandler.setConsumer(json -> {
             if (json == null) return;
@@ -104,12 +104,12 @@ public class OpenWeatherHandler {
             }
 
             this.weatherDataContainer.setCurrent(weather);
-            this.withForecast(consumer);
+            this.withForecast(consumer, interval);
         });
         asyncHandler.execute(this.weatherNowUrl.make());
     }
 
-    public void withForecast(Consumer<WeatherDataContainer> consumer) {
+    public void withForecast(Consumer<WeatherDataContainer> consumer, int interval) {
         AsynchJsonHandler asynchHandler = new AsynchJsonHandler();
         asynchHandler.setConsumer(json -> {
             if (json == null) return;
@@ -118,7 +118,7 @@ public class OpenWeatherHandler {
             try {
                 JSONArray hourlyWeatherJson = json.getJSONArray("hourly");
                 for (int i = 1; i < Math.min(MAX_DATA, dataCount) + 1; i++) {
-                    hourlyWeather.add(this.makeWeather(hourlyWeatherJson.getJSONObject(i)));
+                    hourlyWeather.add(this.makeWeather(hourlyWeatherJson.getJSONObject(i * interval)));
                 }
 
             } catch (JSONException e) {
@@ -126,7 +126,7 @@ public class OpenWeatherHandler {
             }
 
             this.weatherDataContainer.setForecast(hourlyWeather);
-            this.withHistory(consumer);
+            this.withHistory(consumer, interval);
         });
         asynchHandler.execute(
                 this.forecastUrl
@@ -136,7 +136,7 @@ public class OpenWeatherHandler {
         );
     }
 
-    public void withHistory(Consumer<WeatherDataContainer> consumer) {
+    public void withHistory(Consumer<WeatherDataContainer> consumer, int interval) {
         AsynchJsonHandler asynchHandler = new AsynchJsonHandler();
         asynchHandler.setConsumer(json -> {
             if (json == null) return;
@@ -146,7 +146,7 @@ public class OpenWeatherHandler {
             try {
                 JSONArray hourlyWeatherJson = json.getJSONArray("hourly");
                 for (int i = 1; i < Math.min(MAX_DATA, dataCount) + 1; i++) {
-                    hourlyWeather.add(this.makeWeather(hourlyWeatherJson.getJSONObject(hourlyWeatherJson.length() - i)));
+                    hourlyWeather.add(this.makeWeather(hourlyWeatherJson.getJSONObject(hourlyWeatherJson.length() - i * interval)));
                 }
 
             } catch (JSONException e) {

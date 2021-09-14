@@ -82,9 +82,10 @@ public class ViewManager {
         this.contextManager.views.setTextViewText(R.id.current_direction, weather.formatWindDirection());
     }
 
-    public void displayCurrentVersion(Date date) {
+    public void displayCurrentVersion(Date date, int interval) {
         SimpleDateFormat format = new SimpleDateFormat("dd-MM HH:mm", Locale.FRANCE);
         this.setText(R.id.last_update, format.format(date));
+        this.setText(R.id.current_interval, String.format(Locale.FRANCE, "%dh gap", interval));
     }
 
     public void displayForecast(ArrayList<Weather> weatherList) {

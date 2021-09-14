@@ -19,12 +19,13 @@ import fr.tonychouteau.weatherwidget.weather.OpenWeatherHandler;
  */
 public class Widget extends AppWidgetProvider {
 
-    private static final int DATA_COUNT = 9;
+    private static final int DATA_COUNT = 6;
 
     private ContextManager contextManager;
     private ViewManager viewManager;
 
     static private OpenWeatherHandler weatherHandler;
+    static private int interval;
     static private Boolean firstUpdate = true;
 
     //=================================
@@ -38,7 +39,10 @@ public class Widget extends AppWidgetProvider {
 
         if (firstUpdate) {
             weatherHandler = new OpenWeatherHandler(context.getString(R.string.api_key), DATA_COUNT);
+            interval = 1;
             firstUpdate = false;
+        } else {
+            interval = interval % 2 + 1;
         }
 
         this.contextManager = new ContextManager(context, views, appWidgetId, appWidgetManager);
@@ -62,9 +66,9 @@ public class Widget extends AppWidgetProvider {
             if (weatherDataContainer.historyIsValid()) {
                 this.viewManager.displayHistory(weatherDataContainer.getHistory());
             }
-            this.viewManager.displayCurrentVersion(new Date());
+            this.viewManager.displayCurrentVersion(new Date(), interval);
             this.viewManager.updateAppWidget();
-        });
+        }, interval);
     }
 
     //=================================
