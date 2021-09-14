@@ -53,10 +53,13 @@ public class Widget extends AppWidgetProvider {
 
     private void updateWeather() {
         weatherHandler.withWeatherData(weatherDataContainer -> {
-            if (weatherDataContainer.isValid()) {
+            if (weatherDataContainer.currentIsValid()) {
                 this.viewManager.displayCurrentWeather(weatherDataContainer.getCurrent());
-
+            }
+            if (weatherDataContainer.forecastIsValid()) {
                 this.viewManager.displayForecast(weatherDataContainer.getForecast());
+            }
+            if (weatherDataContainer.historyIsValid()) {
                 this.viewManager.displayHistory(weatherDataContainer.getHistory());
             }
             this.viewManager.displayCurrentVersion(new Date());

@@ -70,4 +70,18 @@ public class WeatherDataContainer {
                 this.forecast != null &&
                 this.forecast.size() == this.dataCount;
     }
+
+    public Boolean currentIsValid() {
+        return this.current != null;
+    }
+    
+    public Boolean historyIsValid() {
+        return this.history != null &&
+                this.history.size() == this.dataCount;
+    }
+
+    public Boolean forecastIsValid() {
+        return this.forecast != null &&
+                this.forecast.size() == this.dataCount;
+    }
 }
