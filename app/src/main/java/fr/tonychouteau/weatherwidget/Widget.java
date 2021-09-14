@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
+import java.util.Date;
+
 import fr.tonychouteau.weatherwidget.manager.ContextManager;
 import fr.tonychouteau.weatherwidget.manager.ViewManager;
 import fr.tonychouteau.weatherwidget.weather.OpenWeatherHandler;
@@ -35,7 +37,7 @@ public class Widget extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
 
         if (firstUpdate) {
-            weatherHandler = new OpenWeatherHandler(context.getString(R.string.api_key));
+            weatherHandler = new OpenWeatherHandler(context.getString(R.string.api_key), DATA_COUNT);
             firstUpdate = false;
         }
 
@@ -51,13 +53,15 @@ public class Widget extends AppWidgetProvider {
 
     private void updateWeather() {
         weatherHandler.withWeatherData(weatherDataContainer -> {
-            this.viewManager.displayCurrentWeather(weatherDataContainer.getCurrent());
+            if (weatherDataContainer.isValid()) {
+                this.viewManager.displayCurrentWeather(weatherDataContainer.getCurrent());
 
-            this.viewManager.displayForecast(weatherDataContainer.getForecast());
-            this.viewManager.displayHistory(weatherDataContainer.getHistory());
-
+                this.viewManager.displayForecast(weatherDataContainer.getForecast());
+                this.viewManager.displayHistory(weatherDataContainer.getHistory());
+            }
+            this.viewManager.displayCurrentVersion(new Date());
             this.viewManager.updateAppWidget();
-        }, DATA_COUNT);
+        });
     }
 
     //=================================

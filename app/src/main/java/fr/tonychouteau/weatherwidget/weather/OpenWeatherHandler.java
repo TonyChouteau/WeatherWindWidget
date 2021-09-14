@@ -26,6 +26,7 @@ public class OpenWeatherHandler {
 
     private final WeatherDataContainer weatherDataContainer;
 
+    private final int dataCount;
     private static final int MAX_DATA = 10;
 
     //=================================
@@ -36,8 +37,9 @@ public class OpenWeatherHandler {
     //https://api.openweathermap.org/data/2.5/onecall?lat=48.73&lon=3.46&appid=api_key&exclude=minutely,daily
     //https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=48.73&lon=3.46&appid=api_key&dt=today
 
-    public OpenWeatherHandler(String apiKey) {
-        this.weatherDataContainer = new WeatherDataContainer("Lannion");
+    public OpenWeatherHandler(String apiKey, int dataCount) {
+        this.dataCount = dataCount;
+        this.weatherDataContainer = new WeatherDataContainer("Lannion", (int) Math.min(this.dataCount, MAX_DATA));
 
         this.weatherNowUrl = new UrlHelper(ApiHelper.API_URL + ApiHelper.WEATHER_URL)
                 .param(ApiHelper.CITY, this.weatherDataContainer.getCity())
@@ -82,7 +84,7 @@ public class OpenWeatherHandler {
         return weather;
     }
 
-    public void withWeatherData(Consumer<WeatherDataContainer> consumer, int dataCount) {
+    public void withWeatherData(Consumer<WeatherDataContainer> consumer) {
         AsynchJsonHandler asyncHandler = new AsynchJsonHandler();
         asyncHandler.setConsumer(json -> {
             if (json == null) return;
@@ -102,12 +104,12 @@ public class OpenWeatherHandler {
             }
 
             this.weatherDataContainer.setCurrent(weather);
-            this.withForecast(consumer, dataCount);
+            this.withForecast(consumer);
         });
         asyncHandler.execute(this.weatherNowUrl.make());
     }
 
-    public void withForecast(Consumer<WeatherDataContainer> consumer, int dataCount) {
+    public void withForecast(Consumer<WeatherDataContainer> consumer) {
         AsynchJsonHandler asynchHandler = new AsynchJsonHandler();
         asynchHandler.setConsumer(json -> {
             if (json == null) return;
@@ -124,7 +126,7 @@ public class OpenWeatherHandler {
             }
 
             this.weatherDataContainer.setForecast(hourlyWeather);
-            this.withHistory(consumer, dataCount);
+            this.withHistory(consumer);
         });
         asynchHandler.execute(
                 this.forecastUrl
@@ -134,7 +136,7 @@ public class OpenWeatherHandler {
         );
     }
 
-    public void withHistory(Consumer<WeatherDataContainer> consumer, int dataCount) {
+    public void withHistory(Consumer<WeatherDataContainer> consumer) {
         AsynchJsonHandler asynchHandler = new AsynchJsonHandler();
         asynchHandler.setConsumer(json -> {
             if (json == null) return;

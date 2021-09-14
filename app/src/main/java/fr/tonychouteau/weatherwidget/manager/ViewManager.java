@@ -3,7 +3,10 @@ package fr.tonychouteau.weatherwidget.manager;
 import android.graphics.Bitmap;
 import android.widget.RemoteViews;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import fr.tonychouteau.weatherwidget.R;
 import fr.tonychouteau.weatherwidget.manager.definition.Table;
@@ -77,7 +80,11 @@ public class ViewManager {
         this.updateImageView(this.contextManager.views, R.id.sky_view, ImageHandler.getBitmapFromAsset(this.contextManager.context, weather.getSkyViewPath()));
         this.contextManager.views.setTextViewText(R.id.current_speed, weather.formatWindSpeed());
         this.contextManager.views.setTextViewText(R.id.current_direction, weather.formatWindDirection());
-        this.setText(R.id.last_update, weather.formatDate("dd-MM HH:mm"));
+    }
+
+    public void displayCurrentVersion(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM HH:mm", Locale.FRANCE);
+        this.setText(R.id.last_update, format.format(date));
     }
 
     public void displayForecast(ArrayList<Weather> weatherList) {

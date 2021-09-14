@@ -2,6 +2,8 @@ package fr.tonychouteau.weatherwidget.weather.definition;
 
 import java.util.ArrayList;
 
+import fr.tonychouteau.weatherwidget.Widget;
+import fr.tonychouteau.weatherwidget.weather.OpenWeatherHandler;
 import fr.tonychouteau.weatherwidget.weather.definition.location.Coords;
 
 public class WeatherDataContainer {
@@ -14,7 +16,10 @@ public class WeatherDataContainer {
     private ArrayList<Weather> history;
     private ArrayList<Weather> forecast;
 
-    public WeatherDataContainer(String city) {
+    private final int dataCount;
+
+    public WeatherDataContainer(String city, int dataCount) {
+        this.dataCount = dataCount;
         this.city = city;
     }
 
@@ -56,5 +61,13 @@ public class WeatherDataContainer {
 
     public String getCurrentTimestamp() {
         return this.current.formatTimestamp();
+    }
+
+    public Boolean isValid() {
+        return this.current != null &&
+                this.history != null &&
+                this.history.size() == this.dataCount &&
+                this.forecast != null &&
+                this.forecast.size() == this.dataCount;
     }
 }
