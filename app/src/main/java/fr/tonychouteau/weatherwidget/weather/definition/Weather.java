@@ -34,7 +34,7 @@ public class Weather {
     public void updateWeather(String iconId, double windSpeed, int windDirection, Date date) {
         this.date = date;
         this.iconId = iconId;
-        this.skyViewPath = "skyviews/" + iconId.replace("n", "d") + ApiHelper.X2 + ApiHelper.PNG;
+        this.skyViewPath = "skyviews/" + iconId + ApiHelper.X2 + ApiHelper.PNG;
         this.wind = new Wind(windSpeed, windDirection);
     }
 
