@@ -16,6 +16,19 @@
         android:orientation="horizontal">
 
         <RelativeLayout
+            android:id="@+id/side_left"
+            android:layout_width="5px"
+            android:layout_height="match_parent"
+            android:layout_weight="0">
+
+            <ImageView
+                android:id="@+id/side_left_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/cell_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -76,6 +89,19 @@
                 android:textColor="#FFFFFF"
                 android:textSize="10sp" />
 
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/side_right"
+            android:layout_width="5px"
+            android:layout_height="match_parent"
+            android:layout_weight="0">
+
+            <ImageView
+                android:id="@+id/side_right_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY" />
         </RelativeLayout>
 
     </LinearLayout>

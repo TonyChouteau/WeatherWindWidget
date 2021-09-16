@@ -117,7 +117,7 @@ public class OpenWeatherHandler {
             ArrayList<Weather> hourlyWeather = new ArrayList<>();
             try {
                 JSONArray hourlyWeatherJson = json.getJSONArray("hourly");
-                for (int i = 1; i < Math.min(MAX_DATA, dataCount) + 1; i++) {
+                for (int i = 1; i < Math.min(Math.min(MAX_DATA, dataCount) + 1, hourlyWeatherJson.length()); i++) {
                     hourlyWeather.add(this.makeWeather(hourlyWeatherJson.getJSONObject(i * interval)));
                 }
 
@@ -145,7 +145,7 @@ public class OpenWeatherHandler {
 
             try {
                 JSONArray hourlyWeatherJson = json.getJSONArray("hourly");
-                for (int i = 1; i < Math.min(MAX_DATA, dataCount) + 1; i++) {
+                for (int i = 1; i < Math.min(Math.min(MAX_DATA, dataCount), hourlyWeatherJson.length()) + 1; i++) {
                     hourlyWeather.add(this.makeWeather(hourlyWeatherJson.getJSONObject(hourlyWeatherJson.length() - i * interval)));
                 }
 

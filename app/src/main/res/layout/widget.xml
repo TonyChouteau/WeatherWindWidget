@@ -34,7 +34,8 @@
                 android:layout_width="2dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
-                android:background="#40FFFFFF">
+                android:background="#40FFFFFF"
+                android:visibility="gone">
 
             </RelativeLayout>
 
@@ -124,7 +125,8 @@
                 android:layout_width="2dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
-                android:background="#40FFFFFF">
+                android:background="#40FFFFFF"
+                android:visibility="gone">
 
             </RelativeLayout>
 

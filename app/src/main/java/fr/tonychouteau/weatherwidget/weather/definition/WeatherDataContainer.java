@@ -1,6 +1,11 @@
 package fr.tonychouteau.weatherwidget.weather.definition;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import fr.tonychouteau.weatherwidget.Widget;
 import fr.tonychouteau.weatherwidget.weather.OpenWeatherHandler;
@@ -72,16 +77,16 @@ public class WeatherDataContainer {
     }
 
     public Boolean currentIsValid() {
-        return this.current != null;
-    }
-    
-    public Boolean historyIsValid() {
-        return this.history != null &&
-                this.history.size() == this.dataCount;
+        return this.current != null ;
     }
 
     public Boolean forecastIsValid() {
         return this.forecast != null &&
                 this.forecast.size() == this.dataCount;
+    }
+    
+    public Boolean historyIsValid() {
+        return this.history != null &&
+                this.history.size() == this.dataCount;
     }
 }

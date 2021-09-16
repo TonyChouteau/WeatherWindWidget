@@ -1,6 +1,7 @@
 package fr.tonychouteau.weatherwidget.manager;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.widget.RemoteViews;
 
 import java.text.SimpleDateFormat;
@@ -26,8 +27,8 @@ public class ViewManager {
 
     public ViewManager(ContextManager contextManager) {
         this.contextManager = contextManager;
-        this.forecastTable = new Table();
-        this.historyTable = new Table();
+        this.forecastTable = new Table(R.id.side_left_image);
+        this.historyTable = new Table(R.id.side_right_image);
     }
 
     //=================================
@@ -36,6 +37,13 @@ public class ViewManager {
 
     public void updateImageView(RemoteViews views, int imageView, Bitmap image) {
         views.setImageViewBitmap(imageView, image);
+    }
+
+    public void updateImageViewByColor(RemoteViews views, int imageView, int color) {
+        Bitmap image = Bitmap.createBitmap(5, 20, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(image);
+        canvas.drawColor(color + (0xFF << 24));
+        this.updateImageView(views, imageView, image);
     }
 
     public void setText(int textView, String text) {
@@ -63,6 +71,7 @@ public class ViewManager {
             rowView.setTextViewText(R.id.text_0, weather.formatDate("HH:mm"));
             rowView.setTextViewText(R.id.text_1, weather.formatShortWindSpeed());
             rowView.setTextViewText(R.id.text_2, weather.formatWindDirection());
+            this.updateImageViewByColor(rowView, table.getStateImageViewId(), weather.formatState());
         });
     }
 

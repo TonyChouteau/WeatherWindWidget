@@ -17,15 +17,16 @@ public class Weather {
     private String skyViewPath;
 
     private Wind wind;
+
     private Date date;
+
+    private int state;
 
     //=================================
     // Constructor
     //=================================
 
-    public Weather() {
-
-    }
+    public Weather() {}
 
     //=================================
     // Methods
@@ -36,6 +37,18 @@ public class Weather {
         this.iconId = iconId;
         this.skyViewPath = "skyviews/" + iconId + ApiHelper.X2 + ApiHelper.PNG;
         this.wind = new Wind(windSpeed, windDirection);
+        this.state = this.makeState();
+    }
+
+    public int smoothingFunction(int x) {
+        return (int) Math.min(Math.max(6*((double)x-50)/Math.pow(1+Math.pow(((double)x-50)/120, 2),4)/3.14 + 50, 0), 100);
+//        return 6(x-50)/(1+((x-50)/120)^2)^4/3.14 + 50
+    }
+
+    public int makeState() {
+        int windState = this.smoothingFunction((int) (this.wind.speed * 100 / 7));
+        int skyState = this.smoothingFunction(Math.min(13, Integer.parseInt(this.iconId.replaceAll("[dn]", ""))) * 100 / 13);
+        return (windState + skyState) / 2;
     }
 
     //=================================
@@ -81,5 +94,15 @@ public class Weather {
     public String formatDate(String formatString) {
         SimpleDateFormat format = new SimpleDateFormat(formatString, Locale.FRANCE);
         return format.format(this.date);
+    }
+
+    public int formatState() {
+        // Green : 0 255 0
+        // Yellow : 255 255 0
+        // Red : 255 0 0
+        int r = 255 - Math.max(this.state - 50, 0) * 255 / 50;
+        int g = Math.min(this.state, 50) * 255 / 50;
+
+        return (r << 16) + (g << 8);
     }
 }

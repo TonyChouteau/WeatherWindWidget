@@ -10,8 +10,15 @@ public class Table {
 
     private final ArrayList<Row> rows;
 
-    public Table() {
+    private int getStateImageViewId;
+
+    public Table(int getStateImageViewId) {
+        this.getStateImageViewId = getStateImageViewId;
         rows = new ArrayList<>();
+    }
+
+    public int getStateImageViewId() {
+        return getStateImageViewId;
     }
 
     public void addRow(RemoteViews rowView) {
