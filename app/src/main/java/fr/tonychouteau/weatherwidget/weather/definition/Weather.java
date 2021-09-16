@@ -100,8 +100,8 @@ public class Weather {
         // Green : 0 255 0
         // Yellow : 255 255 0
         // Red : 255 0 0
-        int r = 255 - Math.max(this.state - 50, 0) * 255 / 50;
-        int g = Math.min(this.state, 50) * 255 / 50;
+        int r = 255 - Math.max(100 - this.state - 50, 0) * 255 / 50;
+        int g = Math.min(100 - this.state, 50) * 255 / 50;
 
         return (r << 16) + (g << 8);
     }
