@@ -42,13 +42,12 @@ public class Weather {
 
     public int smoothingFunction(int x) {
         return (int) Math.min(Math.max(6*((double)x-50)/Math.pow(1+Math.pow(((double)x-50)/120, 2),4)/3.14 + 50, 0), 100);
-//        return 6(x-50)/(1+((x-50)/120)^2)^4/3.14 + 50
     }
 
     public int makeState() {
         int windState = this.smoothingFunction((int) (this.wind.speed * 100 / 7));
-        int skyState = this.smoothingFunction(Math.min(13, Integer.parseInt(this.iconId.replaceAll("[dn]", ""))) * 100 / 13);
-        return (windState + skyState) / 2;
+        int skyState = this.smoothingFunction(Math.min(7, Integer.parseInt(this.iconId.replaceAll("[dn]", ""))) * 100 / 7);
+        return Math.max(windState, skyState);
     }
 
     //=================================
