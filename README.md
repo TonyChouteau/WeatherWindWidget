@@ -21,8 +21,8 @@ Add a resource file in the app/res/values folder with the id "api_key" that cont
 ## Démo :
 
 5 x 1
-![](https://github.com/TonyChouteau/WeatherWindWidget/blob/main/images/v2/5x1.jpg)
+![](https://github.com/TonyChouteau/WeatherWindWidget/blob/main/images/v3/5x1.jpg)
 5 x 2
-![](https://github.com/TonyChouteau/WeatherWindWidget/blob/main/images/v2/5x2.jpg)
+![](https://github.com/TonyChouteau/WeatherWindWidget/blob/main/images/v3/5x2.jpg)
 5 x 3
-![](https://github.com/TonyChouteau/WeatherWindWidget/blob/main/images/v2/5x3.jpg)
+![](https://github.com/TonyChouteau/WeatherWindWidget/blob/main/images/v3/5x3.jpg)
