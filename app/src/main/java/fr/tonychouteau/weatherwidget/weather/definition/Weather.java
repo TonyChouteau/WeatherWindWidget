@@ -45,8 +45,8 @@ public class Weather {
     }
 
     public int makeState() {
-        int windState = this.smoothingFunction((int) (this.wind.speed * 100 / 7));
-        int skyState = this.smoothingFunction(Math.min(7, Integer.parseInt(this.iconId.replaceAll("[dn]", ""))) * 100 / 7);
+        int windState = this.smoothingFunction((int) (this.wind.speed * 100 / 8));
+        int skyState = this.smoothingFunction(Math.min(8, Integer.parseInt(this.iconId.replaceAll("[dn]", ""))) * 100 / 8);
         int state = (Math.max(skyState, windState) * 3 + Math.min(skyState, windState) * 1) / 4;
         return state;
     }
